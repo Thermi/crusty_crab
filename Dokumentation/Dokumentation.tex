@@ -1,0 +1,258 @@
+%
+% File Name     : Protokoll.tex
+% Purpose       :
+% Creation Date : 20-12-2013
+% Last Modified : Thu 09 Jan 2014 07:23:02 PM CET
+% Created By    :
+%
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{tabularx}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{fancyhdr}
+\usepackage{alltt}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{biblatex}
+\pagestyle{fancy}
+\fancyhead[R]{\today}
+\fancyhead[L]{Projekt 2}
+
+\begin{document}
+\title{Projekt 2 - Gruppe 8}
+\author{ Oliver Gebhard \and Noel Kuntze \and
+Andrey Nikolaev \and Anna Ostrovskaya }
+\maketitle
+
+
+\newpage
+\tableofcontents
+
+\newpage
+\setcounter{tocdepth}{2}
+
+\newpage
+
+\section{Einleitung}
+
+\subsection{Szenario}
+
+
+\subsection{Problemstellung}
+
+\section{Linear Feedback Shift Register}
+
+Linearesrückkopplungsschieberegister
+
+Beschreibung
+
+\begin{verbatim}
+
+\end{verbatim}
+
+\footnote{http://en.wikipedia.org/LFSR}
+
+\section{Vernam-Chiffre}
+
+\subsection{One-Time-Pad}
+
+\section{Umsetzung}
+
+\subsection{Analyse}
+
+\begin{alltt}
+Legende:
+a - Schlüsselbyte
+z - Verschlüsselungsbyte
+\( \oplus \) steht für XOR mit Rotation um 5 Bit nach rechts.
+\( \boxplus \) steht für Addition MOD 256.
+Um die Verwirrung in Grenzen zu halten wird ab 0 beginnend gezählt.
+
+Allgemein:
+
+Wobei i die aktuelle Runde bzw. der aktuelle Takt darstellt.
+Für die Runden 0 bis 6 gilt für z (das Verschlüsselungsbyte):
+
+    \( z\sb{i} \leftarrow a\sb{i} \boxplus a\sb{i+3} \)
+
+Ab Runde 7 bis 9 wird das erste mal ein bereits überschriebenes 
+Schlüsselbyte verwendet:
+
+    \( z\sb{i} \leftarrow a\sb{i \mod 10} \boxplus (a\sb{i+3 \mod 10} \oplus a\sb{i+8 \mod 10}) \)
+
+Von Runde 10 bis 14 werden zwei Schlüsselbytes die schon überschrieben wurden benutzt.
+In Runde 15 wurde ein Schlüsselbyte bereits das zweite mal überschrieben.
+\footnote{Anhang}
+\end{alltt}
+
+
+
+\subsection{Vollständige Suche}
+
+Probiere jede mögliche Kombination
+
+\subsection{Backtracking}
+
+Allgemeine Herangehensweise: \\
+Pseudocode
+
+\begin{alltt}
+Backtrack(input) {
+
+    //Prüfe Teillösung
+    IF (Teillösung falsch) RETURN
+
+    //Prüfe Gesamtlösung
+    IF (Lösung korrekt) 
+        OUTPUT Lösung
+        RETURN
+    ELSE 
+        RETURN
+
+    //Erweitere Teillösung
+    FOR ALL
+        Backtrack(input + 1)
+}
+\end{alltt}
+
+%\begin{tabular} [h] {||c|l|c||} 
+%\hline \rule[-1.5mm]{0pt}{5.5ex} & \normalsize Beschreibung1 & Beschreibung2 \\ 
+%\hline
+%\hline \rule[-1.5mm]{0pt}{5.5ex} Fall1 & Zelle1 & Zelle2 \\ 
+%\hline \rule[-1.5mm]{0pt}{5.5ex} 2 &  & \\ 
+%\hline \rule[-1.5mm]{0pt}{5.5ex} 3 &  & \\ 
+%\hline \rule[-1.5mm]{0pt}{5.5ex} 4 &  & \\ 
+%\hline \rule[-1.5mm]{0pt}{5.5ex} 5 &  & \\ 
+%\hline \rule[-1.5mm]{0pt}{5.5ex} 6 &  & \\ 
+%\hline \rule[-1.5mm]{0pt}{5.5ex} 7 &  & \\ 
+%\hline
+%\end{tabular}
+
+\subsection{signed vs. unsigned char}
+
+Kein Unterschied, da Verschlüsselung == Entschlüsselung ist, sieht aber besser aus.
+
+\newpage
+\begin{appendix}
+
+\section{Anhang}
+\subsection{LFSR Runden}
+
+\begin{alltt}
+Was passiert in jeder Runde?
+Kein Anspruch auf Richtigkeit:
+
+Innerer Zustand in Runde 0:
+\( a\sb{0} | a\sb{1} | a\sb{2} | a\sb{3} | a\sb{4} | a\sb{5} | a\sb{6} | a\sb{7} | a\sb{8} | a\sb{9} \)
+
+\( z\sb{0} \leftarrow a\sb{0} \boxplus a\sb{3}\)
+\( a'\sb{0} \leftarrow a\sb{0} \oplus a\sb{5} \)
+
+Innerer Zustand in Runde 1:
+\( a'\sb{0} | a\sb{1} | a\sb{2} | a\sb{3} | a\sb{4} | a\sb{5} | a\sb{6} | a\sb{7} | a\sb{8} | a\sb{9} \)
+
+\( z\sb{1} \leftarrow a\sb{1} \boxplus a\sb{4}\)
+\( a'\sb{1} \leftarrow a\sb{1} \oplus a\sb{6} \)
+
+Innerer Zustand in Runde 2:
+\( a'\sb{0} | a'\sb{1} | a\sb{2} | a\sb{3} | a\sb{4} | a\sb{5} | a\sb{6} | a\sb{7} | a\sb{8} | a\sb{9} \)
+
+\( z\sb{2} \leftarrow a\sb{2} \boxplus a\sb{5}\)
+\( a'\sb{2} \leftarrow a\sb{2} \oplus a\sb{7} \)
+
+Innerer Zustand in Runde 3:
+\( a'\sb{0} | a'\sb{1} | a'\sb{2} | a\sb{3} | a\sb{4} | a\sb{5} | a\sb{6} | a\sb{7} | a\sb{8} | a\sb{9} \)
+
+\( z\sb{3} \leftarrow a\sb{3} \boxplus a\sb{6}\)
+\( a'\sb{3} \leftarrow a\sb{3} \oplus a\sb{8} \)
+
+Innerer Zustand in Runde 4:
+\( a'\sb{0} | a'\sb{1} | a'\sb{2} | a'\sb{3} | a\sb{4} | a\sb{5} | a\sb{6} | a\sb{7} | a\sb{8} | a\sb{9} \)
+
+\( z\sb{4} \leftarrow a\sb{4} \boxplus a\sb{7}\)
+\( a'\sb{4} \leftarrow a\sb{4} \oplus a\sb{9} \)
+
+Innerer Zustand in Runde 5:
+\( a'\sb{0} | a'\sb{1} | a'\sb{2} | a'\sb{3} | a'\sb{4} | a\sb{5} | a\sb{6} | a\sb{7} | a\sb{8} | a\sb{9} \)
+
+\( z\sb{5} \leftarrow a\sb{5} \boxplus a\sb{8}\)
+\( a'\sb{5} \leftarrow a\sb{5} \oplus a'\sb{0} , (a\sb{0} \oplus a\sb{5}) \) 
+
+Innerer Zustand in Runde 6:
+\( a'\sb{0} | a'\sb{1} | a'\sb{2} | a'\sb{3} | a'\sb{4} | a'\sb{5} | a\sb{6} | a\sb{7} | a\sb{8} | a\sb{9} \)
+
+\( z\sb{6} \leftarrow a\sb{6} \boxplus a\sb{9}\)
+\( a'\sb{6} \leftarrow a\sb{6} \oplus a'\sb{1} , (a'\sb{1} \leftarrow a\sb{1} \oplus a\sb{6}) \) 
+
+Innerer Zustand in Runde 7:
+\( a'\sb{0} | a'\sb{1} | a'\sb{2} | a'\sb{3} | a'\sb{4} | a'\sb{5} | a'\sb{6} | a\sb{7} | a\sb{8} | a\sb{9} \)
+
+\( z\sb{7} \leftarrow a\sb{7} \boxplus a'\sb{0} , (a\sb{0} \oplus a\sb{5}) \)
+\( a'\sb{7} \leftarrow a\sb{7} \oplus a'\sb{2} , (a\sb{2} \oplus a\sb{7}) \) 
+
+Innerer Zustand in Runde 8:
+\( a'\sb{0} | a'\sb{1} | a'\sb{2} | a'\sb{3} | a'\sb{4} | a'\sb{5} | a'\sb{6} | a'\sb{7} | a\sb{8} | a\sb{9} \)
+
+\( z\sb{8} \leftarrow a\sb{8} \boxplus a'\sb{1} , (a\sb{1} \oplus a\sb{6}) \)
+\( a'\sb{8} \leftarrow a\sb{8} \oplus a'\sb{3} , (a\sb{3} \oplus a\sb{8}) \) 
+
+Innerer Zustand in Runde 9:
+\( a'\sb{0} | a'\sb{1} | a'\sb{2} | a'\sb{3} | a'\sb{4} | a'\sb{5} | a'\sb{6} | a'\sb{7} | a'\sb{8} | a\sb{9} \)
+
+\( z\sb{9} \leftarrow a\sb{9} \boxplus a'\sb{2} , (a\sb{2} \oplus a\sb{7}) \)
+\( a'\sb{9} \leftarrow a\sb{9} \oplus a'\sb{4} , (a\sb{4} \oplus a\sb{9}) \) 
+
+Innerer Zustand in Runde 10:
+\( a'\sb{0} | a'\sb{1} | a'\sb{2} | a'\sb{3} | a'\sb{4} | a'\sb{5} | a'\sb{6} | a'\sb{7} | a'\sb{8} | a'\sb{9} \)
+
+\( z\sb{10} \leftarrow a'\sb{0} \boxplus a'\sb{3} , (a\sb{0} \oplus a\sb{5}) \boxplus (a\sb{3} \oplus a\sb{8}) \)
+\( a''\sb{0} \leftarrow a'\sb{0} \oplus a'\sb{5} , (a\sb{0} \oplus a\sb{5}) \oplus (a\sb{5} \oplus (a\sb{0} \oplus a\sb{5})) \) 
+
+Innerer Zustand in Runde 11:
+\( a''\sb{0} | a'\sb{1} | a'\sb{2} | a'\sb{3} | a'\sb{4} | a'\sb{5} | a'\sb{6} | a'\sb{7} | a'\sb{8} | a'\sb{9} \)
+
+\( z\sb{11} \leftarrow a'\sb{1} \boxplus a'\sb{4} , (a\sb{1} \oplus a\sb{6}) \boxplus (a\sb{4} \oplus a\sb{9}) \)
+\( a''\sb{1} \leftarrow a'\sb{1} \oplus a'\sb{6} , (a\sb{1} \oplus a\sb{6}) \oplus (a\sb{6} \oplus (a\sb{1} \oplus a\sb{6})) \) 
+
+Innerer Zustand in Runde 12:
+\( a''\sb{0} | a''\sb{1} | a'\sb{2} | a'\sb{3} | a'\sb{4} | a'\sb{5} | a'\sb{6} | a'\sb{7} | a'\sb{8} | a'\sb{9} \)
+
+\( z\sb{12} \leftarrow a'\sb{2} \boxplus a'\sb{5} , (a\sb{2} \oplus a\sb{7}) \boxplus (a\sb{5} \oplus (a\sb{0} \oplus a\sb{5})) \)
+\( a''\sb{2} \leftarrow a'\sb{2} \oplus a'\sb{7} , (a\sb{2} \oplus a\sb{7}) \oplus (a\sb{7} \oplus (a\sb{2} \oplus a\sb{7})) \) 
+
+Innerer Zustand in Runde 13:
+\( a''\sb{0} | a''\sb{1} | a''\sb{2} | a'\sb{3} | a'\sb{4} | a'\sb{5} | a'\sb{6} | a'\sb{7} | a'\sb{8} | a'\sb{9} \)
+
+\( z\sb{13} \leftarrow a'\sb{3} \boxplus a'\sb{6} , (a\sb{3} \oplus a\sb{8}) \boxplus (a\sb{6} \oplus (a\sb{1} \oplus a\sb{6})) \)
+\( a''\sb{3} \leftarrow a'\sb{3} \oplus a'\sb{8} , (a\sb{3} \oplus a\sb{8}) \oplus (a\sb{8} \oplus (a\sb{3} \oplus a\sb{8})) \) 
+
+Innerer Zustand in Runde 14:
+\( a''\sb{0} | a''\sb{1} | a''\sb{2} | a''\sb{3} | a'\sb{4} | a'\sb{5} | a'\sb{6} | a'\sb{7} | a'\sb{8} | a'\sb{9} \)
+
+\( z\sb{14} \leftarrow a'\sb{4} \boxplus a'\sb{7} , (a\sb{4} \oplus a\sb{9}) \boxplus (a\sb{7} \oplus (a\sb{2} \oplus a\sb{7})) \)
+\( a''\sb{4} \leftarrow a'\sb{4} \oplus a'\sb{9} , (a\sb{4} \oplus a\sb{9}) \oplus (a\sb{9} \oplus (a\sb{4} \oplus a\sb{9})) \) 
+
+Innerer Zustand in Runde 15:
+\( a''\sb{0} | a''\sb{1} | a''\sb{2} | a''\sb{3} | a''\sb{4} | a'\sb{5} | a'\sb{6} | a'\sb{7} | a'\sb{8} | a'\sb{9} \)
+
+\( z\sb{15} \leftarrow a'\sb{5} \boxplus a'\sb{8} , (a\sb{5} \oplus (a\sb{0} \oplus a\sb{5})) \boxplus (a\sb{8} \oplus (a\sb{3} \oplus a\sb{8})) \)
+\( a''\sb{5} \leftarrow a'\sb{5} \oplus a''\sb{0} , (a\sb{5} \oplus a\sb{0}) \oplus ((a\sb{0} \oplus a\sb{5}) \oplus (a\sb{5} \oplus (a\sb{0} \oplus a\sb{5}))) \) 
+\end{alltt}
+
+\end{appendix}
+
+\newpage
+
+
+\nocite{*}
+\begin{thebibliography}{15}
+\bibitem{LFSR}
+LFSR \nolinkurl{http://en.wikipedia.org/LFSR}
+
+\end{thebibliography}
+
+\end{document}
