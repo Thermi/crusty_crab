@@ -13,7 +13,7 @@
 #include <stdint.h>
 
 #include "crappy_one.h"
-#include "debug/debug.h"
+#include "../debug/debug.h"
 
 /*
  * Rotation um 5 Bit nach rechts
@@ -29,16 +29,18 @@
  *
  */
 
-char rotate_right(char rotate) {
+#define rotate_right(rotate) (rotate>>5) OR (rotate<<3)
+
+/* char rotate_right(char rotate) {
     return (rotate>>5) OR (rotate<<3);
-}
+} */
 
 /*
  * Linear Feedback Shift Register
  * mit jedem Takt (clock) wird ein Byte des inneren Zustands veraendert
  * Anfangszustand ist der Schluessel selbst (key)
  *
- * Schluessel selbst wird nicht veraendert (wird in inner_state kopiert) 
+ * Schluessel selbst wird nicht veraendert (wird in inner_state kopiert)
  * aus der Aufgabenstellung:
  *          inner_state entspricht a
  *          in temp wird z (a_i + a_i+3) gespeichert
@@ -81,7 +83,7 @@ void lfsr(char *plain, char *cipher, char *key) {
     free(inner_state);
 }
 
-/* Rotation um 5 Bit nach rechts 
+/* Rotation um 5 Bit nach rechts
 char rotate_right(char rotate) {
     char temp;
 
@@ -94,7 +96,7 @@ char rotate_right(char rotate) {
     rotate              = rotate * LEFT;
     temp                = temp / RIGHT;
     rotate              = rotate XOR temp;
-    
+
 #ifdef DEBUG_ROT
     bin_dump(rotate);
 #endif
