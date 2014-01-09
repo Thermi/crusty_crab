@@ -12,8 +12,8 @@
 #include <stdint.h>
 
 #include "backtrack.h"
-#include "crappy_one/crappy_one.h"
-#include "debug/debug.h"
+#include "../crappy_one/crappy_one.h"
+#include "../debug/debug.h"
 
 /*
  * Backtracking Algorithmus zum finden des Schluessels
@@ -33,7 +33,7 @@
  *            Wenn alle 10 Bytes gesetzt sind (KEYLEN) wird die bisherige Loesung
  *            als komplett angesehn und ueberprueft (encrypt_and_compare).
  *            Ist die Loesung falsch wird via status eine Nachricht an den Aufrufer zurueckgesendet.
- *            Wichtig: in dieser Konstellation kann beim ueberpruefen der kompletten Loesung nicht 
+ *            Wichtig: in dieser Konstellation kann beim ueberpruefen der kompletten Loesung nicht
  *            davon ausgangen werden, dass diese richtig ist. Diese Variante hat aber den Vorteil,
  *            dass der Rekursionsbaum nur 10 Ebenen hat.
  *
@@ -99,7 +99,7 @@ void expand_current_solution(char *key, char byte, int pos) {
  *
  * Wird erst aufgerufen wenn pos auf 4 steht, das heisst die Bytes 0 bis 3
  * gesetzt sind.
- * Vergleiche ob das XOR von Klartext und Chiffre (byte bzw. z) mit dem 
+ * Vergleiche ob das XOR von Klartext und Chiffre (byte bzw. z) mit dem
  * Schluessel ((a_i + a_i+3) MOD 256) generiert werden kann.
  *
  * Falls nicht soll dies dem Aufrufer (andere Backtrack-Instanz) mitgeteilt
@@ -128,7 +128,7 @@ int check_current_solution(char *plain, char *cipher, char *key, int pos) {
  * falls Chiffre uebereinstimmt wird 0 an den Aufrufer zurueckgegeben
  * diese wird bis ins Hauptprogramm (main) durchgereicht, dort wird
  * der gefundene Schluessel ausgegeben.
- * 
+ *
  */
 int encrypt_and_compare(char *plain, char *cipher, char *key) {
     char *compare = NULL;
