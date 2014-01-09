@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+for i in $(seq 100) 
+do
+    
+    key="$(perl -e '@chars = ("A".."Z", "a".."z", "0".."9"); $string .= $chars[rand @chars] for 1..10; print $string;')"
+    plaintext="$(perl -e '@chars = ("A".."Z", "a".."z", "0".."9"); $string .= $chars[rand @chars] for 1..16; print $string;')"
+    echo ./crusty_crab $plaintext $key
+    ./crusty_crab $plaintext $key | grep recovered
+
+done

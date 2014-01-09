@@ -1,0 +1,51 @@
+#!/usr/bin/env less
+
+Ordnerstruktur
+
+/
+    crusty_crab.c
+    Makefile
+    keyfile
+    ciphertext
+    plaintext
+
+    debug
+        debug.c
+        debug.h
+
+    crappy_one
+        crappy_one.c
+        crappy_one.h
+
+    backtrack
+        backtrack.c
+        backtrack.h
+
+#Kompilieren:
+    entweder make crusty im root-Verzeichnis
+    oder von Hand eintippen was im Makefile steht 
+    (gcc $c_files $compiler_options -o $programmname)
+
+#Ausfuehren:
+    ./$programmname
+    Es gibt zwei Betriebsmodi:
+        ohne Parameter:
+            Programm laedt alles was es braucht aus Dateien im gleichen Ordner
+            diese heissen
+                keyfile - mit 10 Zeichen fuer den Schluessel
+                plaintext - mit 16 Zeichen die verschluesselt werden sollen
+            das Ergebis wird in
+                ciphertext und recoveredkeyfile
+                geschrieben
+            sind bei Programmstart die Dateien keyfile und plaintext nicht vorhanden wird abgebrochen
+
+         mit Parameter:
+            zwei, als erstes die 16 Zeichen plaintext dann 10 Zeichen fuer den Schluessel
+
+
+#Testscript
+    das Testscript im root-Verzeichnis fuehrt das Programm mit zwei zufaellig erstellten Zeichenketten aus
+    und grepped nach der Zeile "recovered key:", welche am Ende des durchlaufs ausgegeben werden sollte
+
+    ./$programmname plaintext keytext
+
