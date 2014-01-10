@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-std=c11 -Wall -ggdb -O1 -fbuiltin -W -Wstrict-prototypes -Wreturn-type -Wsequence-point -pedantic -Wextra 
+CFLAGS=-std=c11 -Wall -ggdb -O0 -fbuiltin -W -Wstrict-prototypes -Wreturn-type -Wsequence-point -pedantic -Wextra 
 DEBUGALL=-DDEBUG_ROT -DDEBUG_LFSR -DDEBUG_EAC -DDEBUG
 SRCCO=crappy_one/crappy_one.c
 SRCDBG=debug/debug.c
