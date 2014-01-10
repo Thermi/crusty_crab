@@ -16,7 +16,7 @@
 #include "debug/debug.h"
 
 /*
- * Rotation um 5 Bit nach rechts
+ * Rotation um 5 Bit nach rechts:
  *
  * Beispiel: 'A' (0x41)
  *
@@ -34,20 +34,20 @@ char rotate_right(char rotate) {
 }
 
 /*
- * Linear Feedback Shift Register
- * mit jedem Takt (clock) wird ein Byte des inneren Zustands veraendert
- * Anfangszustand ist der Schluessel selbst (key)
+ * Linear Feedback Shift Register:
+ * Mit jedem Takt (clock) wird ein Byte des inneren Zustands veraendert.
+ * Anfangszustand ist der Schluessel selbst (key).
  *
- * Schluessel selbst wird nicht veraendert (wird in inner_state kopiert) 
+ * Schluessel selbst wird nicht veraendert (wird in inner_state kopiert).
  * aus der Aufgabenstellung:
  *          inner_state entspricht a
- *          in temp wird z (a_i + a_i+3) gespeichert
+ *          temp entspricht z (a_i + a_i+3) gespeichert
  *          das XOR von Klartext und z ergibt den Chiffretext
  *
  *          der neue Zustand (a'_i bzw. rot5(a_i+10 XOR a_i+5)) wird auch in temp
  *          zwischengespeichert
  *
- * Der ganze Vorgang wird, in unserem Fall, 16 (BUFFERLEN) Runden wiederholt.
+ * Der ganze Vorgang wird 16 (BUFFERLEN) Runden wiederholt.
  *
  */
 
@@ -80,25 +80,3 @@ void lfsr(char *plain, char *cipher, char *key) {
 
     free(inner_state);
 }
-
-/* Rotation um 5 Bit nach rechts 
-char rotate_right(char rotate) {
-    char temp;
-
-#ifdef DEBUG_ROT
-    bin_dump(rotate);
-#endif
-
-    temp                = rotate;
-    rotate              = temp % RIGHT;
-    rotate              = rotate * LEFT;
-    temp                = temp / RIGHT;
-    rotate              = rotate XOR temp;
-    
-#ifdef DEBUG_ROT
-    bin_dump(rotate);
-#endif
-
-    return rotate;
-}
-*/

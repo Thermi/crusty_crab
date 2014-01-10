@@ -28,8 +28,10 @@
  *            als Pointer uebergeben.
  *            In jeder Runde wird ein Schluesselbyte berechnet (Abschnitt erweitere TL)
  *            und die aktuelle Position (pos) um eins erhoeht.
- *            Nachdem die ersten vier byte gesetzt sind kann das erste mal geprueft werden
+ *            Nachdem die ersten vier Byte gesetzt sind (zum ersten Eintritt in check_current_solution() hat pos den Wert 4!
+ *            im Schluessel sind die Bytes 0..3 gesetzt) kann das erste mal geprueft werden, 
  *            ob die Bytes fuer die Loesung in Frage kommen. (Pruefe TL)
+ *            
  *            Wenn alle 10 Bytes gesetzt sind (KEYLEN) wird die bisherige Loesung
  *            als komplett angesehn und ueberprueft (encrypt_and_compare).
  *            Ist die Loesung falsch wird via status eine Nachricht an den Aufrufer zurueckgesendet.
@@ -37,7 +39,7 @@
  *            davon ausgangen werden, dass diese richtig ist. Diese Variante hat aber den Vorteil,
  *            dass der Rekursionsbaum nur 10 Ebenen hat.
  *
- * status == 0 bedeutet der selbst errechnete Schluessel generiert den gleichen Chiffretext wie der
+ * status == 0 bedeutet, der selbst errechnete Schluessel generiert den gleichen Chiffretext wie der
  *             originale Schluessel.
  *
  */
@@ -47,7 +49,7 @@ int backtrack(char *plain, char *cipher, char *key, int pos) {
     int i = 0;
 
 /*
- * Pruefe Teilloesung in jedem zweiten Schritt
+ * Pruefe Teilloesung nach 4 gesetzten Schluesselbytes (pos hat den Wert 4)
  *
  */
     if ((pos > 3) && (pos <= KEYLEN)) {

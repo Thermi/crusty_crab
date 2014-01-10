@@ -42,8 +42,8 @@ int main (int argc, char *argv[])
 
 /*
  * Speicher alloziieren und Strings abschliessen
- * Stringabschluss unnoetig, da nie als String verwendet wird
- * sondern nur als folge von chars
+ * (Stringabschluss unnoetig, da nie als String verwendet wird
+ * sondern nur als Folge von chars)
  */
     key     = ec_malloc(KEYLEN+1);
     rec_key = ec_calloc(KEYLEN+1);
@@ -56,16 +56,16 @@ int main (int argc, char *argv[])
     cipher[BUFFERLEN]   = '\0';
 
 /*
- * Anhand der Anzahl uebergebener Argumente pruefen ob
- * Inhalte aus Datei geladen werden oder aus Argumenten kopiert
- * kurzes Usage falls zuviele Argumente uebergeben werden
+ * Anhand der Anzahl uebergebener Argumente pruefen ob,
+ * Inhalte aus Datei geladen oder aus Argumenten kopiert werden.
+ * Kurzes Usage, falls zuviele Argumente uebergeben werden.
  *
  */
 /*
- * Kopiere Inhalt von Datei oder von uebergebenen Argumenten
+ * Kopiere Inhalt aus Datei oder von uebergebenen Argumenten
  * Selbstgestriktes strncpy:
- * Laenge der Eingabe wird nicht geprueft
- * Es wird davon ausgegangen dass 16 + 10 Zeichen uebergeben werden
+ * Laenge der Eingabe wird nicht geprueft.
+ * Es wird davon ausgegangen, dass 16 + 10 Zeichen uebergeben werden.
  *
  */
     if (argc == 3) {
@@ -95,9 +95,9 @@ int main (int argc, char *argv[])
     }
 
 /*
- * Makros fuer bedingte Kompilierung
- * wichtige Debug Informationen "dumpen"
- * in Hex bzw binaer darstellen
+ * Makros fuer bedingte Kompilierung:
+ * Wichtige Debug Informationen "dumpen"
+ * (in Hex bzw binaer darstellen)
  *
  */
 #ifdef DEBUG
@@ -108,8 +108,7 @@ int main (int argc, char *argv[])
 #endif
 
 /*
- * Aufruf des Ver- und Entschluesselungs- 
- * Algorithmuses
+ * Aufruf des Ver- und Entschluesselungsalgorithmus
  *
  */
     lfsr(plain, cipher, key);
@@ -120,7 +119,7 @@ int main (int argc, char *argv[])
 #endif
 
 /*
- * Ohne Programmaufrufparameter wird chiffre
+ * Ohne Programmaufrufparameter wird der Chiffretext
  * fuer spaetere Verwendung in Datei gespeichert
  *
  */
@@ -129,9 +128,9 @@ int main (int argc, char *argv[])
     }
 
 /*
- * Eigentlicher known plaintext Angriff
+ * Eigentlicher known plaintext Angriff:
  * Ergebnis wird in rec_key gespeichert und 
- * bei Erfolg ausgegeben. Bei Misserfolg auch zu Debug zwecken
+ * bei Erfolg ausgegeben. Auch bei Misserfolg (zu Debug Zwecken)
  *
  * status == 0 bedeutet, dass der Schluessel gefunden wurde
  * alles ungleich 0 ist ein Fehler
@@ -145,7 +144,7 @@ int main (int argc, char *argv[])
 
 /*
  * Ergebnis wird in jedem Fall ausgegeben und je nach dem
- * wie Programm aufgerufen wird auch in eine Datei gespeichert
+ * wie Programm aufgerufen wurde auch in eine Datei gespeichert
  *
  */
     if (status == 0) {
@@ -179,8 +178,8 @@ int main (int argc, char *argv[])
     printf("Profit\n");
 
 /*
- * Aufraeumen, speicher wieder freigeben
- * wird nicht benoetigt, da Programmende
+ * Aufraeumen: Speicher wieder freigeben
+ * (wird nicht benoetigt, da Programmende)
  *
  */
     free(key);
