@@ -14,6 +14,8 @@
 #include "crappy_one.h"
 #include "../debug/debug.h"
 
+#define rotate_right(rotate) (rotate>>5) OR (rotate<<3)
+
 /*
  * Rotation um 5 Bit nach rechts:
  *
@@ -28,9 +30,13 @@
  *
  */
 
+/*
 uint8_t rotate_right(uint8_t rotate) {
     return (rotate>>5) OR (rotate<<3);
 }
+
+Durch Makro ersetzt
+*/
 
 /*
  * Linear Feedback Shift Register:
