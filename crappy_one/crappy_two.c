@@ -12,7 +12,7 @@
 #include <stdint.h>
 
 #include "crappy_one.h"
-#include "debug/debug.h"
+#include "../debug/debug.h"
 
 /*
  * Rotation um 5 Bit nach rechts:

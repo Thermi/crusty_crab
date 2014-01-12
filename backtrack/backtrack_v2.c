@@ -11,8 +11,8 @@
 #include <stdint.h>
 
 #include "backtrack.h"
-#include "crappy_one/crappy_one.h"
-#include "debug/debug.h"
+#include "../crappy_one/crappy_one.h"
+#include "../debug/debug.h"
 
 /*
  * Backtracking Algorithmus zum finden des Schluessels
