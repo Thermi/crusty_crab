@@ -26,10 +26,10 @@ int main (int argc, char *argv[])
     int i           = 0;
     int status      = -1;
 
-    char *key       = NULL;
-    char *rec_key   = NULL;
-    char *plain     = NULL;
-    char *cipher    = NULL;
+    uint8_t *key       = NULL;
+    uint8_t *rec_key   = NULL;
+    uint8_t *plain     = NULL;
+    uint8_t *cipher    = NULL;
 
 /*
  * Dateinamen zuweisen

@@ -9,7 +9,6 @@
 #define _XOPEN_SOURCE 9001
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdint.h>
 
 #include "crappy_one.h"
@@ -29,7 +28,7 @@
  *
  */
 
-char rotate_right(char rotate) {
+uint8_t rotate_right(uint8_t rotate) {
     return (rotate>>5) OR (rotate<<3);
 }
 
@@ -51,13 +50,13 @@ char rotate_right(char rotate) {
  *
  */
 
-void lfsr(char *plain, char *cipher, char *key) {
+void lfsr(uint8_t *plain, uint8_t *cipher, uint8_t *key) {
     int clock = 0;
-    char temp;
-    char *inner_state = NULL;
+    uint8_t temp;
+    uint8_t *inner_state = NULL;
 
     inner_state = ec_malloc(KEYLEN+1);
-    strncpy(inner_state, key, KEYLEN);
+    bad_strncpy(inner_state, key, KEYLEN);
     inner_state[KEYLEN] = '\0';
 
 #ifdef DEBUG_LFSR
@@ -66,10 +65,10 @@ void lfsr(char *plain, char *cipher, char *key) {
 #endif
 
     for (clock = 0; clock < BUFFERLEN; clock++) {
-        temp                        = (inner_state[(clock % KEYLEN)] + inner_state[(clock + 3) % KEYLEN]) MOD 0x100;
-        cipher[clock]               = (plain[clock] XOR temp) MOD 0x100;
+        temp                               = (inner_state[(clock % KEYLEN)] + inner_state[(clock + 3) % KEYLEN]) MOD 0x100;
+        cipher[clock]                      = (plain[clock] XOR temp) MOD 0x100;
 
-        temp                        = (inner_state[(clock + 10) % KEYLEN] XOR inner_state[(clock + 5) % KEYLEN]) MOD 0x100;
+        temp                               = (inner_state[(clock + 10) % KEYLEN] XOR inner_state[(clock + 5) % KEYLEN]) MOD 0x100;
         inner_state[(clock + 10) % KEYLEN] = rotate_right(temp);
 
 #ifdef DEBUG_LFSR

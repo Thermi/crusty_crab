@@ -46,6 +46,7 @@
 int backtrack(uint8_t *plain, uint8_t *cipher, uint8_t *key, int pos) {
     int status = -1;
     int i = 0;
+    uint8_t byte;
 
 /*
  * Pruefe Teilloesung nach 4 gesetzten Schluesselbytes (pos hat den Wert 4)
@@ -65,13 +66,15 @@ int backtrack(uint8_t *plain, uint8_t *cipher, uint8_t *key, int pos) {
         return encrypt_and_compare(plain, cipher, key);
     }
 
-
 /*
  * Erweitere Teilloesung:
- * Fuer alle moeglichen Werte im aktuell freien Feld
+ * Fuer alle moeglichen Werte im aktuell freien Feld.
+ * Statt an jeder Position alle Moeglichkeiten durchzugehen, wird
+ * dies nur fuer die Schluesselbytes 0,1 und 2 gemacht
+ * anhand dieser werden die restlichen errechnet.
  *
  */
-    if (pos < KEYLEN) {
+    if (pos < 3) {
         for (i = 0; i < 0x100; i++) {
             expand_current_solution(key, (((uint8_t) i) MOD 0x100), pos);
             status = backtrack(plain, cipher, key, (pos + 1));
@@ -80,6 +83,11 @@ int backtrack(uint8_t *plain, uint8_t *cipher, uint8_t *key, int pos) {
                 i = 0x101;
             }
         }
+    }
+    if ((pos >= 3) && (pos < KEYLEN)) {
+        byte = (plain[(pos - 3)] XOR cipher[(pos - 3)]) MOD 0x100;
+        expand_current_solution(key, ((byte - key[(pos - 3)]) MOD 0x100), pos);
+        status = backtrack(plain, cipher, key, (pos + 1));
     }
     return status;
 }
