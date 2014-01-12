@@ -17,8 +17,8 @@
 #define DIV     /
 #define OR      |
 
-char rotate_right(char rotate);
+uint8_t rotate_right(uint8_t rotate);
 
-void lfsr(char *plain, char *cipher, char *key);
+void lfsr(uint8_t *plain, uint8_t *cipher, uint8_t *key);
 
 #endif

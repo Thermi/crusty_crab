@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdint.h>
 #include <fcntl.h>
 
 #include "debug.h"
@@ -30,12 +31,38 @@ void fatal(char *message) {
 }
 
 /*
+ * unsichere String Funktionen,
+ * um uint8_t ohne Compiler-Meldungen benutzen zu koennen
+ *
+ */
+int bad_strncmp(uint8_t *dest, uint8_t *src, unsigned int length) {
+    int status = 0;
+    unsigned int i = 0;
+
+    for (i = 0; i < length; i++) {
+        if (dest[i] != src[i]) {
+            status = -1;
+        }
+    }
+
+    return status;
+}
+
+void bad_strncpy(uint8_t *dest, uint8_t *src, unsigned int length) {
+    unsigned int i = 0;
+
+    for (i = 0; i < length; i++) {
+        dest[i] = src[i];
+    }
+}
+
+/*
  * Speicheralloziierung mit Fehlerueberpruefung
  * malloc + calloc
  */
 void *ec_malloc(unsigned int size) {
     void *ptr;
-    ptr = malloc(size);
+    ptr = malloc(sizeof(ptr)*size);
     if (ptr == NULL) {
         fatal("in ec_malloc() on memory allocation");
     }
@@ -43,7 +70,7 @@ void *ec_malloc(unsigned int size) {
 }
 void *ec_calloc(unsigned int size) {
     void *ptr;
-    ptr = calloc(0, size);
+    ptr = calloc(0, sizeof(ptr)*size);
     if (ptr == NULL) {
         fatal("in ec_calloc() on memory allocation");
     }
@@ -54,8 +81,8 @@ void *ec_calloc(unsigned int size) {
  * Gegebenen String in Hex darstellen
  *
  */
-void hex_dump(char *data_buffer, const unsigned int length) {
-    char byte;
+void hex_dump(uint8_t *data_buffer, const unsigned int length) {
+    uint8_t byte;
     unsigned int i, j;
     for (i = 0; i < length; i++) {
         byte = data_buffer[i];
@@ -83,7 +110,7 @@ void hex_dump(char *data_buffer, const unsigned int length) {
  * Fuer gegebenes Byte die gesetzten Bits zeigen
  *
  */
-void bin_dump(char byte) {
+void bin_dump(uint8_t byte) {
     int i;
 
     printf("%02x ", byte);
@@ -114,7 +141,7 @@ int ec_open(const char *filename, int mode) {
     return fd;
 }
 
-void ec_read(const char *filename, char *buffer, unsigned int bufferlength) {
+void ec_read(const char *filename, uint8_t *buffer, unsigned int bufferlength) {
     int fd;
     ssize_t len;
 
@@ -128,7 +155,7 @@ void ec_read(const char *filename, char *buffer, unsigned int bufferlength) {
     close(fd);
 }
 
-void ec_write(const char *filename, char *buffer, unsigned int bufferlength) {
+void ec_write(const char *filename, uint8_t *buffer, unsigned int bufferlength) {
     int fd;
     ssize_t len;
 

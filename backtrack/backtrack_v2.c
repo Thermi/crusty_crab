@@ -34,7 +34,7 @@
  *            Wenn alle 10 Bytes gesetzt sind (KEYLEN) wird die bisherige Loesung
  *            als komplett angesehn und ueberprueft (encrypt_and_compare).
  *            Ist die Loesung falsch wird via status eine Nachricht an den Aufrufer zurueckgesendet.
- *            Wichtig: in dieser Konstellation kann beim ueberpruefen der kompletten Loesung nicht
+ *            Wichtig: in dieser Konstellation kann beim ueberpruefen der kompletten Loesung nicht 
  *            davon ausgangen werden, dass diese richtig ist. Diese Variante hat aber den Vorteil,
  *            dass der Rekursionsbaum nur 10 Ebenen hat.
  *
@@ -46,6 +46,7 @@
 int backtrack(uint8_t *plain, uint8_t *cipher, uint8_t *key, int pos) {
     int status = -1;
     int i = 0;
+    uint8_t byte;
 
 /*
  * Pruefe Teilloesung nach 4 gesetzten Schluesselbytes (pos hat den Wert 4)
@@ -65,13 +66,15 @@ int backtrack(uint8_t *plain, uint8_t *cipher, uint8_t *key, int pos) {
         return encrypt_and_compare(plain, cipher, key);
     }
 
-
 /*
  * Erweitere Teilloesung:
- * Fuer alle moeglichen Werte im aktuell freien Feld
+ * Fuer alle moeglichen Werte im aktuell freien Feld.
+ * Statt an jeder Position alle Moeglichkeiten durchzugehen, wird
+ * dies nur fuer die Schluesselbytes 0,1 und 2 gemacht
+ * anhand dieser werden die restlichen errechnet.
  *
  */
-    if (pos < KEYLEN) {
+    if (pos < 3) {
         for (i = 0; i < 0x100; i++) {
             expand_current_solution(key, (((uint8_t) i) MOD 0x100), pos);
             status = backtrack(plain, cipher, key, (pos + 1));
@@ -80,6 +83,11 @@ int backtrack(uint8_t *plain, uint8_t *cipher, uint8_t *key, int pos) {
                 i = 0x101;
             }
         }
+    }
+    if ((pos >= 3) && (pos < KEYLEN)) {
+        byte = (plain[(pos - 3)] XOR cipher[(pos - 3)]) MOD 0x100;
+        expand_current_solution(key, ((byte - key[(pos - 3)]) MOD 0x100), pos);
+        status = backtrack(plain, cipher, key, (pos + 1));
     }
     return status;
 }
@@ -99,7 +107,7 @@ void expand_current_solution(uint8_t *key, uint8_t byte, int pos) {
  *
  * Wird erst aufgerufen wenn pos auf 4 steht, das heisst die Bytes 0 bis 3
  * gesetzt sind.
- * Vergleiche ob das XOR von Klartext und Chiffre (byte bzw. z) mit dem
+ * Vergleiche ob das XOR von Klartext und Chiffre (byte bzw. z) mit dem 
  * Schluessel ((a_i + a_i+3) MOD 256) generiert werden kann.
  *
  * Falls nicht soll dies dem Aufrufer (andere Backtrack-Instanz) mitgeteilt
@@ -128,7 +136,7 @@ int check_current_solution(uint8_t *plain, uint8_t *cipher, uint8_t *key, int po
  * falls Chiffre uebereinstimmt wird 0 an den Aufrufer zurueckgegeben
  * diese wird bis ins Hauptprogramm (main) durchgereicht, dort wird
  * der gefundene Schluessel ausgegeben.
- *
+ * 
  */
 int encrypt_and_compare(uint8_t *plain, uint8_t *cipher, uint8_t *key) {
     uint8_t *compare = NULL;

@@ -5,6 +5,7 @@
  * Andrey Nikolaev, Anna Ostrovskaya, Noel Kuntze, Oliver Gebhard
  *
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -19,13 +20,13 @@
         printf("or %s {-h, --help}\n", argv[0]); \
         printf("The inputs have to be 16 characters long each!\n");
 /*
- * Dieses Programm kann genutzt werden, um eine gefundene Lösung
- * zu verifizieren, falls crusty_crab mit -O1 oder -O2 kompiliert wurde.
- *
- * Benutzung:
- * --help und -h für eine Hilfenachricht
- * check_solution Klartext Ciphertext Key
- */
+* Dieses Programm kann genutzt werden, um eine gefundene Lösung
+* zu verifizieren, falls crusty_crab mit -O1 oder -O2 kompiliert wurde.
+*
+* Benutzung:
+* --help und -h für eine Hilfenachricht
+* check_solution Klartext Ciphertext Key
+*/
 
 int main(int argc, char *argv[]) {
     char *plaintext, *ciphertext,*key;

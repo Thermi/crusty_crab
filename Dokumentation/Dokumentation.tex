@@ -2,7 +2,7 @@
 % File Name     : Protokoll.tex
 % Purpose       :
 % Creation Date : 20-12-2013
-% Last Modified : Thu 09 Jan 2014 07:23:02 PM CET
+% Last Modified : Sat 11 Jan 2014 10:37:59 PM CET
 % Created By    :
 %
 \documentclass[a4paper,12pt]{article}
@@ -39,30 +39,28 @@ Andrey Nikolaev \and Anna Ostrovskaya }
 
 \section{Einleitung}
 
+Im Zuge dieser Projektarbeit soll ein Known-Plaintext-Angriff auf eine einfache Stromchiffre realisiert werden.
+Und im zweiten Schritt geknackt werden.
+Hierbei soll es möglich sein mit einem gegebenen Klartext/ Chiffretext-Paar den Schlüssel (oder einen Schlüssel), der zum verschlüsseln des Klartextes verwendet wurde, berechnet werden.
+Nachfolgend wird der Klartext mit m (Message) der Chiffretext mit c (Cipher) und der Schlüssel je nach Kontext mit k (Key) oder a (lt. Aufgabenstellung) abgekürzt.
+Das Ergebnis aus Klartext XOR Chiffretext wird mit z abgekürzt (lt. Aufgabenstellung).
+
 \subsection{Szenario}
 
+Gegeben ist die Funktionsweise eines Pseudozufallszahlengenerator mit dem Namen Crappy-One, der die Basis für eine Stromchiffre darstellt.
+Diese Stromchiffre wird mit einem 10 Byte langen Schlüssel gefüttert und verschlüsselt damit ein 16 Byte langen Klartext.
+Aus dem Klartext und dem resultierenden Chiffretext soll nun der Schlüssel wiederhergestellt werden.
+Der Wiederherstellungsprozess des Schlüssels soll über einen Backtracking-Algorithmus realisiert werden.
 
 \subsection{Problemstellung}
 
-\section{Linear Feedback Shift Register}
-
-Linearesrückkopplungsschieberegister
-
-Beschreibung
-
-\begin{verbatim}
-
-\end{verbatim}
-
-\footnote{http://en.wikipedia.org/LFSR}
-
-\section{Vernam-Chiffre}
-
-\subsection{One-Time-Pad}
+Das Problem besteht im Groben aus zwei Komponenten: 
+\begin{itemize}
+\item den Zufallszahlengenerator, um den die Stromchiffre gebaut wird
+\item dem Backtracking-Algorithmus, zum finden eines passenden Schlüssels
+\end{itemize}
 
 \section{Umsetzung}
-
-\subsection{Analyse}
 
 \begin{alltt}
 Legende:
@@ -77,23 +75,30 @@ Allgemein:
 Wobei i die aktuelle Runde bzw. der aktuelle Takt darstellt.
 Für die Runden 0 bis 6 gilt für z (das Verschlüsselungsbyte):
 
-    \( z\sb{i} \leftarrow a\sb{i} \boxplus a\sb{i+3} \)
+\( z\sb{i} \leftarrow a\sb{i} \boxplus a\sb{i+3} \)
 
 Ab Runde 7 bis 9 wird das erste mal ein bereits überschriebenes 
 Schlüsselbyte verwendet:
 
-    \( z\sb{i} \leftarrow a\sb{i \mod 10} \boxplus (a\sb{i+3 \mod 10} \oplus a\sb{i+8 \mod 10}) \)
+\( z\sb{i} \leftarrow a\sb{i \mod 10} \boxplus (a\sb{i+3 \mod 10} \oplus a\sb{i+8 \mod 10}) \)
 
 Von Runde 10 bis 14 werden zwei Schlüsselbytes die schon überschrieben wurden benutzt.
 In Runde 15 wurde ein Schlüsselbyte bereits das zweite mal überschrieben.
 \footnote{Anhang}
 \end{alltt}
 
+\subsection{Zufallszahlengenerator}
 
+Schlüsselstromgenerator
+Linearesrückkopplungsschieberegister
 
-\subsection{Vollständige Suche}
+Beschreibung
 
-Probiere jede mögliche Kombination
+\begin{verbatim}
+
+\end{verbatim}
+
+\footnote{http://en.wikipedia.org/LFSR}
 
 \subsection{Backtracking}
 
@@ -119,22 +124,19 @@ Backtrack(input) {
 }
 \end{alltt}
 
-%\begin{tabular} [h] {||c|l|c||} 
-%\hline \rule[-1.5mm]{0pt}{5.5ex} & \normalsize Beschreibung1 & Beschreibung2 \\ 
-%\hline
-%\hline \rule[-1.5mm]{0pt}{5.5ex} Fall1 & Zelle1 & Zelle2 \\ 
-%\hline \rule[-1.5mm]{0pt}{5.5ex} 2 &  & \\ 
-%\hline \rule[-1.5mm]{0pt}{5.5ex} 3 &  & \\ 
-%\hline \rule[-1.5mm]{0pt}{5.5ex} 4 &  & \\ 
-%\hline \rule[-1.5mm]{0pt}{5.5ex} 5 &  & \\ 
-%\hline \rule[-1.5mm]{0pt}{5.5ex} 6 &  & \\ 
-%\hline \rule[-1.5mm]{0pt}{5.5ex} 7 &  & \\ 
-%\hline
-%\end{tabular}
 
-\subsection{signed vs. unsigned char}
+\section{Analyse}
 
-Kein Unterschied, da Verschlüsselung == Entschlüsselung ist, sieht aber besser aus.
+\subsection{Vernam-Chiffre}
+
+$c_i = m_i \oplus z_i$
+
+\subsection{One-Time-Pad}
+
+\subsection{Vollständige Suche}
+
+Probiere jede mögliche Kombination
+
 
 \newpage
 \begin{appendix}
